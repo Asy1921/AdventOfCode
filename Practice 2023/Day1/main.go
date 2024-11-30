@@ -20,7 +20,6 @@ func main() {
 	digits := map[string]rune{
 		"zero": '0', "one": '1', "two": '2', "three": '3', "four": '4', "five": '5', "six": '6', "seven": '7', "eight": '8', "nine": '9',
 	}
-	// digitArr := []string{"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"}
 
 	sum := 0
 	scanner := bufio.NewScanner(file)
@@ -49,7 +48,7 @@ func main() {
 
 		for i := 0; i < len(s); i++ {
 			splitstr := s[i:]
-			if unicode.IsDigit(rune(splitstr[0])) == true {
+			if unicode.IsDigit(rune(splitstr[0])) {
 				digLeft = rune(splitstr[0])
 				found = true
 				break
@@ -68,7 +67,7 @@ func main() {
 		found = false
 		for i := len(s) - 1; i >= 0; i-- {
 			splitstr := s[0 : i+1]
-			if unicode.IsDigit(rune(splitstr[i])) == true {
+			if unicode.IsDigit(rune(splitstr[i])) {
 				digRight = rune(splitstr[i])
 				found = true
 				break
