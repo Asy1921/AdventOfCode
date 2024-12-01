@@ -45,5 +45,25 @@ func main() {
 	fmt.Println(sum)
 
 	//Part 2
+	//Dictionary of occurences in rightArr
+	occurences := make(map[int]int)
+	for dig := range rightArr {
+		val, ok := occurences[rightArr[dig]]
+		// If the key exists
+		if ok {
+			occurences[rightArr[dig]] = val + 1
+		} else {
+			occurences[rightArr[dig]] = 1
+		}
+
+	}
+	similarityScore := 0
+	for dig := range leftArr {
+		val, ok := occurences[leftArr[dig]]
+		if ok {
+			similarityScore += leftArr[dig] * val
+		}
+	}
+	fmt.Println("Similarity Score=", similarityScore)
 
 }
