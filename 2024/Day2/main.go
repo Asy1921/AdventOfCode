@@ -33,7 +33,7 @@ func main() {
 			validReports++
 			fmt.Println(s, " is valid")
 		} else {
-			fmt.Println(s, " is not valid")
+			// fmt.Println(s, " is not valid")
 		}
 	}
 	fmt.Println("Valid Reports=", validReports)
@@ -46,8 +46,6 @@ func checkReportValidity(intArr []int, dampCount int) bool {
 	if dampCount > 1 {
 		return false
 	}
-	if len(intArr) > 0 {
-
 		if CheckAbsDiff(intArr, 1) {
 			if intArr[0] > intArr[1] {
 				//Decreasing
@@ -55,7 +53,8 @@ func checkReportValidity(intArr []int, dampCount int) bool {
 					if intArr[idx-1] <= intArr[idx] || !(CheckAbsDiff(intArr, idx)) {
 						if dampCount == 0 {
 							newArr := removeElement(intArr, idx)
-							return checkReportValidity(newArr, 1)
+							newArr1:= removeElement(intArr,idx-1)
+							return checkReportValidity(newArr, 1) || checkReportValidity(newArr1, 1)
 						} else {
 							return false
 						}
@@ -67,7 +66,8 @@ func checkReportValidity(intArr []int, dampCount int) bool {
 					if intArr[idx-1] >= intArr[idx] || !(CheckAbsDiff(intArr, idx)) {
 						if dampCount == 0 {
 							newArr := removeElement(intArr, idx)
-							return checkReportValidity(newArr, 1)
+							newArr1:= removeElement(intArr,idx-1)
+							return checkReportValidity(newArr, 1) || checkReportValidity(newArr1, 1)
 						} else {
 							return false
 						}
@@ -86,7 +86,7 @@ func checkReportValidity(intArr []int, dampCount int) bool {
 			}
 
 		}
-	}
+	
 	return true
 }
 func removeElement(originalArray []int, i int) []int {
