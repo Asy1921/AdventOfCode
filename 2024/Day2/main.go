@@ -27,11 +27,13 @@ func main() {
 			intVal, _ := strconv.Atoi(val)
 			intArr = append(intArr, intVal)
 		}
-		validReport := checkReportValidity(intArr, 0)
+		newArr := removeElement(intArr, 1)
+		newArr1 := removeElement(intArr, 0)
+		validReport := checkReportValidity(intArr, 0) || checkReportValidity(newArr, 1) || checkReportValidity(newArr1, 1)
 
 		if validReport {
 			validReports++
-			fmt.Println(s, " is valid")
+			fmt.Println(s, " is safe")
 		} else {
 			// fmt.Println(s, " is not valid")
 		}
@@ -46,47 +48,23 @@ func checkReportValidity(intArr []int, dampCount int) bool {
 	if dampCount > 1 {
 		return false
 	}
-		if CheckAbsDiff(intArr, 1) {
-			if intArr[0] > intArr[1] {
-				//Decreasing
-				for idx := 1; idx < len(intArr); idx++ {
-					if intArr[idx-1] <= intArr[idx] || !(CheckAbsDiff(intArr, idx)) {
-						if dampCount == 0 {
-							newArr := removeElement(intArr, idx)
-							newArr1:= removeElement(intArr,idx-1)
-							return checkReportValidity(newArr, 1) || checkReportValidity(newArr1, 1)
-						} else {
-							return false
-						}
-					}
-				}
-			} else {
-				//Increasing
-				for idx := 1; idx < len(intArr); idx++ {
-					if intArr[idx-1] >= intArr[idx] || !(CheckAbsDiff(intArr, idx)) {
-						if dampCount == 0 {
-							newArr := removeElement(intArr, idx)
-							newArr1:= removeElement(intArr,idx-1)
-							return checkReportValidity(newArr, 1) || checkReportValidity(newArr1, 1)
-						} else {
-							return false
-						}
-					}
-				}
+
+	if intArr[0] > intArr[1] {
+		//Decreasing
+		for idx := 1; idx < len(intArr); idx++ {
+			if intArr[idx-1] <= intArr[idx] || !(CheckAbsDiff(intArr, idx)) {
+				return checkWithDeletions(intArr, dampCount, idx)
 			}
-
-		} else {
-
-			if dampCount == 0 {
-				newArr := removeElement(intArr, 1)
-				newArr1 := removeElement(intArr, 0)
-				return checkReportValidity(newArr, 1) || checkReportValidity(newArr1, 1)
-			} else {
-				return false
-			}
-
 		}
-	
+	} else {
+		//Increasing
+		for idx := 1; idx < len(intArr); idx++ {
+			if intArr[idx-1] >= intArr[idx] || !(CheckAbsDiff(intArr, idx)) {
+				return checkWithDeletions(intArr, dampCount, idx)
+			}
+		}
+	}
+
 	return true
 }
 func removeElement(originalArray []int, i int) []int {
@@ -101,4 +79,14 @@ func removeElement(originalArray []int, i int) []int {
 	}
 
 	return newArr
+}
+
+func checkWithDeletions(intArr []int, dampCount int, idx int) bool {
+	if dampCount == 0 {
+		newArr := removeElement(intArr, idx)
+		newArr1 := removeElement(intArr, idx-1)
+		return checkReportValidity(newArr, dampCount+1) || checkReportValidity(newArr1, dampCount+1)
+	} else {
+		return false
+	}
 }
